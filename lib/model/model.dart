@@ -28,7 +28,7 @@ class ClassPerguntas {
 }
 
 class ClassTemas {
-  String temasUuId;
+  String? temasUuId;
   String temasNome;
   int temasPerguntas;
   int temasRespostas;
@@ -48,4 +48,10 @@ class ClassTemas {
       temasRespostas: map['temasRespostas'.toString()],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'temasNome': temasNome,
+        'temasPerguntas': temasPerguntas,
+        'temasRespostas': temasRespostas,
+      };
 }

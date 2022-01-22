@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:popquiz/model/model.dart';
-import 'package:popquiz/paginas/respostas.dart';
+import 'package:popquiz/paginas/editartema/editartema.dart';
 import 'package:popquiz/services/conectar.dart';
 
-class Temas extends StatefulWidget {
-  const Temas({Key? key}) : super(key: key);
+class EscolheTema extends StatefulWidget {
+  const EscolheTema({Key? key}) : super(key: key);
 
   @override
-  _TemasState createState() => _TemasState();
+  _EscolheTemaState createState() => _EscolheTemaState();
 }
 
-class _TemasState extends State<Temas> {
+class _EscolheTemaState extends State<EscolheTema> {
   Conecta conectar = Conecta();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Temas'),
+        title: const Text('Editar Tema'),
         centerTitle: true,
         backgroundColor: const Color(0xFFFF9E1B),
       ),
@@ -54,8 +54,9 @@ class _TemasState extends State<Temas> {
                           subtitle: Text(
                             'Perguntas : ${post.temasPerguntas.toString()}    Respostas : ${post.temasRespostas.toString()}',
                           ),
-                          onTap: () => responder(post.temasUuId.toString(),
-                              post.temasNome.toString()),
+                          onTap: () => {
+                            responder(post),
+                          },
                         ),
                       ),
                     )
@@ -70,13 +71,15 @@ class _TemasState extends State<Temas> {
     );
   }
 
-  responder(String temaEscolhido, String temaNome) {
+  responder(ClassTemas posts) {
     Navigator.of(context)
-        .push(MaterialPageRoute(
-            builder: (context) => Respostas(
-                  temaEscolhido: temaEscolhido,
-                  temaNome: temaNome,
-                )))
+        .push(
+          MaterialPageRoute(
+            builder: (context) => EditarTema(
+              posts: posts,
+            ),
+          ),
+        )
         .then((_) => setState(() {}));
   }
 }

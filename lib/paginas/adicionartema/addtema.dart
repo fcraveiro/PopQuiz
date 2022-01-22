@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,16 +15,11 @@ class AddTemas extends StatefulWidget {
 }
 
 List listar = [];
-
-bool tudoCerto = false;
-
 bool temaCerto = false;
 bool textCerto = false;
 bool addCerto = false;
 bool jaTem = false;
-
-bool podeGravar = true;
-List<ClassTemas> lista = [];
+int numeroPerguntas = 0;
 
 class _AddTemasState extends State<AddTemas> {
   final titleController = TextEditingController();
@@ -63,17 +59,13 @@ class _AddTemasState extends State<AddTemas> {
 
   var contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 0);
 
-//  late List<ClassPerguntas> lista;
-
   @override
   void initState() {
     listar = [];
+    addCerto = false;
     textCerto = false;
-    tudoCerto = false;
     temaCerto = false;
     jaTem = false;
-
-    podeGravar = true;
     super.initState();
   }
 
@@ -133,16 +125,23 @@ class _AddTemasState extends State<AddTemas> {
                     onSurface: Colors.white,
                   ),
                   onPressed: () async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+
                     await lerAgora(_nomeController.text);
-                    jaTem
-                        ? {
-                            mensagem('Já Existe este Tema'),
-                            setState(
-                              () => {temaCerto = false},
-                            ),
-                          }
-                        : setState(() => {temaCerto = true});
-                    // _showAddEventDialog();
+                    if (textCerto) {
+                      jaTem
+                          ? {
+                              mensagem('Já Existe este Tema'),
+                              setState(
+                                () => {temaCerto = false},
+                              ),
+                            }
+                          : setState(() => {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode()),
+                                temaCerto = true
+                              });
+                    }
                   },
                   child: Text(
                     'Check o Nome',
@@ -191,7 +190,6 @@ class _AddTemasState extends State<AddTemas> {
                                   child: InkWell(
                                     onTap: () => {
                                       setState(() {
-//                                      log(listar.toString()),
                                         listar.remove(listar[index]);
                                         listar.isEmpty
                                             ? addCerto = false
@@ -281,17 +279,27 @@ class _AddTemasState extends State<AddTemas> {
   }
 
   gravarPerguntas() {
-    for (var element in listar) {
+    for (var e in listar) {
       {
-        log(element.toString());
-        ClassPerguntas teste = ClassPerguntas(
+//        log(element.toString());
+        numeroPerguntas++;
+        ClassPerguntas classe = ClassPerguntas(
             quizUuId: null,
-            quizPergunta: element,
+            quizPergunta: e,
             quizNome: _nomeController.text,
             quizResposta: null);
-        conectar.addPerguntas(teste);
+        conectar.addPerguntas(classe);
       }
+      log(numeroPerguntas.toString());
     }
+
+    ClassTemas testa = ClassTemas(
+      temasUuId: null,
+      temasNome: _nomeController.text,
+      temasPerguntas: numeroPerguntas,
+      temasRespostas: 0,
+    );
+    conectar.addTemas(testa);
   }
 
   _showAddEventDialog() async {
@@ -312,6 +320,7 @@ class _AddTemasState extends State<AddTemas> {
               actions: [
                 TextButton(
                   onPressed: () => {
+                    FocusScope.of(context).requestFocus(FocusNode()),
                     titleController.clear(),
                     Navigator.pop(context),
                   },
@@ -417,7 +426,8 @@ class _AddTemasState extends State<AddTemas> {
       });
       return [];
     } else {
-      log(response.error.toString());
+      // ignore: avoid_print
+      print(response.error.toString());
     }
     throw '';
   }

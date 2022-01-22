@@ -68,6 +68,25 @@ class Conecta {
         .then((value) => log(value.error.toString()));
   }
 
+  Future addTemas(campos) async {
+    ClassTemas novosTemas = campos;
+    Map<String, dynamic> novosTemasJson = novosTemas.toJson();
+    await client
+        .from('temas')
+        .insert(novosTemasJson)
+        .execute()
+        .then((value) => log(value.error.toString()));
+  }
+
+  Future delPergunta(String uuid) async {
+    await client
+        .from('perguntas')
+        .delete()
+        .eq('quizUuId', uuid)
+        .execute()
+        .then((value) => log(value.error.toString()));
+  }
+
 /*
 
   Future delHistorico(int idPaciente) async {

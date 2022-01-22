@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:popquiz/addtema.dart';
-import 'package:popquiz/paginas/temas.dart';
+import 'package:popquiz/paginas/adicionartema/addtema.dart';
+import 'package:popquiz/paginas/editartema/escolhetema.dart';
+import 'package:popquiz/paginas/responder/temas.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -78,7 +79,32 @@ class _MenuState extends State<Menu> {
                 );
               },
               child: Text(
-                'Add Temas',
+                'Novo Tema',
+                style: GoogleFonts.montserrat(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 7,
+                fixedSize: const Size(140, 40),
+                primary: const Color(0xFF006075),
+                onSurface: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const EscolheTema(),
+                  ),
+                );
+              },
+              child: Text(
+                'Edita Tema',
                 style: GoogleFonts.montserrat(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
