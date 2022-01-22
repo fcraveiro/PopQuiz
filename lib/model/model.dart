@@ -1,0 +1,51 @@
+class ClassPerguntas {
+  String? quizUuId;
+  String quizTema;
+  String quizPergunta;
+  String? quizResposta;
+
+  ClassPerguntas({
+    required this.quizUuId,
+    required this.quizTema,
+    required this.quizPergunta,
+    required this.quizResposta,
+  });
+
+  factory ClassPerguntas.fromJson(Map<String, dynamic> map) {
+    return ClassPerguntas(
+      quizUuId: map['quizUuId'.toString()],
+      quizTema: map['quizTema'.toString()],
+      quizPergunta: map['quizPergunta'],
+      quizResposta: map['quizResposta'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'quizPergunta': quizPergunta,
+        'quizTema': quizTema,
+        'quizResposta': quizResposta,
+      };
+}
+
+class ClassTemas {
+  String temasUuId;
+  String temasNome;
+  int temasPerguntas;
+  int temasRespostas;
+
+  ClassTemas({
+    required this.temasUuId,
+    required this.temasNome,
+    required this.temasPerguntas,
+    required this.temasRespostas,
+  });
+
+  factory ClassTemas.fromJson(Map<String, dynamic> map) {
+    return ClassTemas(
+      temasUuId: map['temasUuId'.toString()],
+      temasNome: map['temasNome'.toString()],
+      temasPerguntas: map['temasPerguntas'.toString()],
+      temasRespostas: map['temasRespostas'.toString()],
+    );
+  }
+}
