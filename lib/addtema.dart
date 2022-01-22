@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:popquiz/model/model.dart';
 import 'package:popquiz/services/conectar.dart';
+import 'package:supabase/supabase.dart';
 
 class AddTemas extends StatefulWidget {
   const AddTemas({Key? key}) : super(key: key);
@@ -14,15 +15,65 @@ class AddTemas extends StatefulWidget {
 
 List listar = [];
 
+bool tudoCerto = false;
+
+bool temaCerto = false;
+bool textCerto = false;
+bool addCerto = false;
+bool jaTem = false;
+
+bool podeGravar = true;
+List<ClassTemas> lista = [];
+
 class _AddTemasState extends State<AddTemas> {
   final titleController = TextEditingController();
   Conecta conectar = Conecta();
+  final TextEditingController _nomeController = TextEditingController();
+  final client = SupabaseClient(supabaseUrl, supabaseKey);
+
+  var focusBorder = const OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Colors.red,
+      width: 1,
+    ),
+    borderRadius: BorderRadius.all(
+      Radius.circular(6),
+    ),
+  );
+
+  var outlineInputBorder = const OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Colors.pink,
+      width: 1,
+    ),
+    borderRadius: BorderRadius.all(
+      Radius.circular(6),
+    ),
+  );
+
+  var labelStyle = const TextStyle(
+    color: Colors.blue,
+    fontSize: 14,
+  );
+
+  var style = const TextStyle(
+    fontSize: 14,
+    color: Colors.black,
+  );
+
+  var contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 0);
 
 //  late List<ClassPerguntas> lista;
 
   @override
   void initState() {
     listar = [];
+    textCerto = false;
+    tudoCerto = false;
+    temaCerto = false;
+    jaTem = false;
+
+    podeGravar = true;
     super.initState();
   }
 
@@ -33,47 +84,77 @@ class _AddTemasState extends State<AddTemas> {
         title: const Text('Adicionar Temas'),
         centerTitle: true,
         backgroundColor: const Color(0xFFFF9E1B),
-        actions: [
-          InkWell(
-            onTap: () => {
-              gravarPerguntas(),
-            },
-            child: const Icon(FontAwesomeIcons.save),
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-        ],
+        actions: temaCerto && addCerto
+            ? [
+                InkWell(
+                  onTap: () => {
+                    gravarPerguntas(),
+                  },
+                  child: const Icon(FontAwesomeIcons.save),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+              ]
+            : [],
       ),
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        backgroundColor: const Color(0xFF006075),
-        onPressed: () {
-          _showAddEventDialog();
-        },
-        child: const FaIcon(FontAwesomeIcons.plus),
-      ),
+      floatingActionButton: temaCerto
+          ? FloatingActionButton.extended(
+              backgroundColor: const Color(0xFF006075),
+              onPressed: () async {
+                temaCerto ? _showAddEventDialog() : const Text('');
+              },
+              icon: const FaIcon(FontAwesomeIcons.plus),
+              label: const Text('Adicionar Perguntas'),
+            )
+          : const Text(''),
       body: Column(
         children: [
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 7,
-              fixedSize: const Size(100, 40),
-              primary: const Color(0xFF006075),
-              onSurface: Colors.white,
-            ),
-            onPressed: () {
-              _showAddEventDialog();
-            },
-            child: Text(
-              'Temas',
-              style: GoogleFonts.montserrat(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
+          Center(
+            child: Row(
+              children: [
+                Container(
+                  width: 245,
+                  height: 45,
+                  margin: const EdgeInsets.only(left: 20),
+                  child: formTema(),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 7,
+                    fixedSize: const Size(85, 40),
+                    primary: const Color(0xFF006075),
+                    onSurface: Colors.white,
+                  ),
+                  onPressed: () async {
+                    await lerAgora(_nomeController.text);
+                    jaTem
+                        ? {
+                            mensagem('Já Existe este Tema'),
+                            setState(
+                              () => {temaCerto = false},
+                            ),
+                          }
+                        : setState(() => {temaCerto = true});
+                    // _showAddEventDialog();
+                  },
+                  child: Text(
+                    'Check o Nome',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(
@@ -101,7 +182,7 @@ class _AddTemasState extends State<AddTemas> {
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Text(
                                     listar[index].toString(),
-                                    style: styleAzul(),
+                                    style: estiloAzul(),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -109,9 +190,13 @@ class _AddTemasState extends State<AddTemas> {
                                   padding: const EdgeInsets.only(right: 10),
                                   child: InkWell(
                                     onTap: () => {
-                                      log(listar.toString()),
-                                      listar.remove(listar[index]),
-                                      setState(() {}),
+                                      setState(() {
+//                                      log(listar.toString()),
+                                        listar.remove(listar[index]);
+                                        listar.isEmpty
+                                            ? addCerto = false
+                                            : addCerto = true;
+                                      }),
                                     },
                                     child: FaIcon(
                                       FontAwesomeIcons.trash,
@@ -134,7 +219,51 @@ class _AddTemasState extends State<AddTemas> {
     );
   }
 
-  style() {
+  Widget formTema() {
+    return SizedBox(
+      height: 42,
+      child: TextFormField(
+        controller: _nomeController,
+        style: style,
+        decoration: decoration('Tema (Minimo 4 Letras)', textCerto),
+        onTap: () => {
+          setState(() => temaCerto = false),
+        },
+        onChanged: (value) => {
+          value.isEmpty || value.length < 4
+              ? textCerto = false
+              : {
+                  textCerto = true,
+                },
+          setState(() {})
+        },
+      ),
+    );
+  }
+
+  decoration(texto, textCerto) {
+    return InputDecoration(
+      border: InputBorder.none,
+      contentPadding: contentPadding,
+      labelText: texto,
+      labelStyle: labelStyle,
+      enabledBorder: outlineInputBorder,
+      focusedBorder: focusBorder,
+      suffixIcon: textCerto
+          ? const Icon(
+              FontAwesomeIcons.thumbsUp,
+              color: Colors.green,
+              size: 20,
+            )
+          : Icon(
+              FontAwesomeIcons.times,
+              color: Colors.red.shade300,
+              size: 20,
+            ),
+    );
+  }
+
+  estiloPreto() {
     return GoogleFonts.roboto(
       fontSize: 16,
       letterSpacing: .3,
@@ -142,7 +271,7 @@ class _AddTemasState extends State<AddTemas> {
     );
   }
 
-  styleAzul() {
+  estiloAzul() {
     return GoogleFonts.roboto(
       fontSize: 16,
       color: Colors.blue[900],
@@ -157,8 +286,8 @@ class _AddTemasState extends State<AddTemas> {
         log(element.toString());
         ClassPerguntas teste = ClassPerguntas(
             quizUuId: null,
-            quizTema: 'c36c4a94-fdf4-4f27-8c2e-626da25e0e32',
             quizPergunta: element,
+            quizNome: _nomeController.text,
             quizResposta: null);
         conectar.addPerguntas(teste);
       }
@@ -208,33 +337,15 @@ class _AddTemasState extends State<AddTemas> {
                   ),
                   onPressed: () {
                     if (titleController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: const Color(0xFFFF9E1B),
-                          content: Container(
-                            height: 25,
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Você deve digitar a Pergunta',
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 18, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                          duration: const Duration(seconds: 3),
-                          padding: const EdgeInsets.only(bottom: 22, top: 22),
-                        ),
-                      );
-                      //Navigator.pop(context);
+                      mensagem('Você deve digitar a Pergunta');
                       return;
                     } else {
-                      listar.add(titleController.text);
-                      titleController.clear();
-                      Navigator.pop(context);
-                      setState(() {});
+                      setState(() {
+                        listar.add(titleController.text);
+                        titleController.clear();
+                        Navigator.pop(context);
+                        addCerto = true;
+                      });
                     }
                   },
                 ),
@@ -263,5 +374,51 @@ class _AddTemasState extends State<AddTemas> {
         ),
       ),
     );
+  }
+
+  mensagem(texto) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: const Color(0xFFFF9E1B),
+        content: Container(
+          height: 25,
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Text(
+                texto,
+                style: GoogleFonts.roboto(fontSize: 18, color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+        duration: const Duration(seconds: 3),
+        padding: const EdgeInsets.only(bottom: 22, top: 22),
+      ),
+    );
+  }
+
+  Future<List<ClassTemas>> lerAgora(campo) async {
+    final response = await client
+        .from('temas')
+        .select()
+        .eq('temasNome', campo)
+        .order('temasNome', ascending: true)
+        .execute();
+    if (response.error == null) {
+      final dataList = response.data as List;
+      if (dataList.isEmpty) {
+        jaTem = false;
+      } else {
+        jaTem = true;
+      }
+      setState(() {
+        jaTem;
+      });
+      return [];
+    } else {
+      log(response.error.toString());
+    }
+    throw '';
   }
 }

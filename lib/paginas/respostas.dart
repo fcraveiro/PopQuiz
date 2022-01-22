@@ -45,7 +45,7 @@ class _RespostasState extends State<Respostas> {
         ],
       ),
       body: FutureBuilder(
-        future: conectar.getPerguntas(widget.temaEscolhido),
+        future: conectar.getPerguntas(widget.temaNome),
         builder: (BuildContext context,
             AsyncSnapshot<List<ClassPerguntas>> snapshot) {
           if (snapshot.hasData) {
@@ -85,7 +85,7 @@ class _RespostasState extends State<Respostas> {
                                 lista = posts;
                                 gravaRespostas(
                                     posts[index].quizUuId.toString(),
-                                    posts[index].quizTema.toString(),
+                                    posts[index].quizNome.toString(),
                                     posts[index].quizPergunta.toString(),
                                     posts[index].quizResposta.toString());
                               }

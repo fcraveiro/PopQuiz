@@ -1,12 +1,12 @@
 class ClassPerguntas {
   String? quizUuId;
-  String quizTema;
+  String quizNome;
   String quizPergunta;
   String? quizResposta;
 
   ClassPerguntas({
     required this.quizUuId,
-    required this.quizTema,
+    required this.quizNome,
     required this.quizPergunta,
     required this.quizResposta,
   });
@@ -14,7 +14,7 @@ class ClassPerguntas {
   factory ClassPerguntas.fromJson(Map<String, dynamic> map) {
     return ClassPerguntas(
       quizUuId: map['quizUuId'.toString()],
-      quizTema: map['quizTema'.toString()],
+      quizNome: map['quizNome'.toString()],
       quizPergunta: map['quizPergunta'],
       quizResposta: map['quizResposta'],
     );
@@ -22,7 +22,7 @@ class ClassPerguntas {
 
   Map<String, dynamic> toJson() => {
         'quizPergunta': quizPergunta,
-        'quizTema': quizTema,
+        'quizNome': quizNome,
         'quizResposta': quizResposta,
       };
 }

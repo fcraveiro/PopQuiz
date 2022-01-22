@@ -29,7 +29,7 @@ class Conecta {
     final response = await client
         .from('perguntas')
         .select()
-        .eq('quizTema', tema)
+        .eq('quizNome', tema)
         .order('quizPergunta', ascending: true)
         .execute();
     if (response.error == null) {
