@@ -84,14 +84,6 @@ class _RespostasState extends State<Respostas> {
                               {
                                 posts[index].quizResposta = value.toString();
                                 lista = posts;
-/*
-                                gravaRespostas(
-                                    posts[index].quizUuId.toString(),
-                                    posts[index].quizNome.toString(),
-                                    posts[index].quizPergunta.toString(),
-                                    posts[index].quizResposta.toString());
-
-                                    */
                               }
                             },
                           ),
@@ -110,10 +102,6 @@ class _RespostasState extends State<Respostas> {
     );
   }
 
-  gravaRespostas(uuid, tema, pergunta, resposta) {
-//    conectar.quizRespostas(uuid, resposta);
-  }
-
   verRespostas(lista) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -124,8 +112,3 @@ class _RespostasState extends State<Respostas> {
     );
   }
 }
-
-//    log('UuId ${uuid.toString()}');
-//    log('Tema ${tema.toString()}');
-//    log('Pergunta ${pergunta.toString()}');
-//    log('Resposta ${resposta.toString()}');

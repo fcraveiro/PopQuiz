@@ -44,16 +44,6 @@ class Conecta {
         .execute()
         .then((value) => log(value.error.toString()));
   }
-/*
-  temasRespostas(String temasUuId, int perguntas, int respostas) async {
-    await client
-        .from('temas')
-        .update({'temasPerguntas': perguntas, 'temasRespostas': respostas})
-        .eq('temasUuId', temasUuId)
-        .execute()
-        .then((value) => log('Temas ok'));
-  }
-*/
 
   updateTema(String temasUuId, String temasNome) async {
     await client
@@ -140,16 +130,4 @@ class Conecta {
         .execute()
         .then((value) => log(value.error.toString()));
   }
-
-/*
-  Future delHistorico(int idPaciente) async {
-    await client
-        .from('historico')
-        .delete()
-        .eq('hisIdPaciente', idPaciente)
-        .execute();
-  }
-
-*/
-
 }

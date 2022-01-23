@@ -1,16 +1,15 @@
-# popquiz
+Janeiro/2022
 
-A new Flutter project.
+Aplicativo desenvolvido em Flutter
 
-## Getting Started
+PopQuiz - Processo Seletivo CheckMob
 
-This project is a starting point for a Flutter application.
+Atenção - Sistema atualizado nas últimas versões
 
-A few resources to get you started if this is your first Flutter project:
+Desenvolvido em :
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Flutter = Channel stable, 2.8.2-0.0.pre.1, Android SDK version 32.0.0 kotlin = '1.6.10' Gradle = gradle:7.0.4' distribution = gradle-7.0.2-all.zip
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+android/build.gradle android/gradle/wrapper/gradle-wrapper.properties
+
+![Screenshot_1642957665](https://user-images.githubusercontent.com/31604881/150689804-b96b994a-1ebb-401a-abdc-b129a02d7a9f.png)

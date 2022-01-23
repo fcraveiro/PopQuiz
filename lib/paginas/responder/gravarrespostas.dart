@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:popquiz/model/model.dart';
@@ -119,8 +118,11 @@ class _GravaRespostaState extends State<GravaResposta> {
                     primary: const Color(0xFF006075),
                     onSurface: Colors.white,
                   ),
-                  onPressed: () {
-                    gravaRespostas();
+                  onPressed: () async {
+                    await gravaRespostas();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'Gravar',
@@ -144,7 +146,6 @@ class _GravaRespostaState extends State<GravaResposta> {
         if (e.quizResposta == null || e.quizResposta == '') {
         } else {
           contador++;
-          log(contador.toString());
           await conectar.updateTotalRespostas(e.quizNome.toString(), contador);
         }
         await conectar.quizRespostas(

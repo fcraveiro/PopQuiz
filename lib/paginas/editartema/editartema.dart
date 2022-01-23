@@ -19,6 +19,7 @@ List<ClassPerguntas> listar = [];
 
 int tipo = 0;
 int perguntasTotal = 0;
+int contador = 0;
 
 class _EditarTemaState extends State<EditarTema> {
   Conecta conectar = Conecta();
@@ -28,6 +29,7 @@ class _EditarTemaState extends State<EditarTema> {
   @override
   void initState() {
     perguntasTotal = 0;
+    contador = widget.posts.temasRespostas;
     super.initState();
   }
 
@@ -150,7 +152,9 @@ class _EditarTemaState extends State<EditarTema> {
                                   onTap: () => {
                                     perguntasTotal--,
                                     deletarPergunta(
-                                        lista[index].quizUuId, perguntasTotal),
+                                        lista[index].quizUuId,
+                                        lista[index].quizResposta,
+                                        perguntasTotal),
                                   },
                                   child: FaIcon(
                                     FontAwesomeIcons.trash,
@@ -254,10 +258,15 @@ class _EditarTemaState extends State<EditarTema> {
     );
   }
 
-  deletarPergunta(uuid, total) async {
+  deletarPergunta(uuid, resposta, total) async {
     await conectar.delPergunta(uuid);
     await conectar.updateTotalPerguntas(
         widget.posts.temasUuId.toString(), total);
+    if (resposta != null && resposta != '') {
+      contador--;
+      await conectar.updateTotalRespostas(
+          widget.posts.temasNome.toString(), contador);
+    }
     setState(() {});
   }
 
