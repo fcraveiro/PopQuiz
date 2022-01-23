@@ -19,6 +19,4 @@ android/build.gradle android/gradle/wrapper/gradle-wrapper.properties
 
   <img src="https://user-images.githubusercontent.com/31604881/150690487-a8dd1670-9588-45e5-99a0-d81bc34bee13.png" width="300" title="hover text">
 
-  <img src="https://user-images.githubusercontent.com/31604881/150690489-5db41fdb-7337-45b2-b345-395fb9ab1867.png" width="300" title="hover text">
-
   <img src="https://user-images.githubusercontent.com/31604881/150690490-64141809-2110-462c-8c0c-cf46527ea8fe.png" width="300" title="hover text">
