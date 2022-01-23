@@ -13,3 +13,7 @@ Flutter = Channel stable, 2.8.2-0.0.pre.1, Android SDK version 32.0.0 kotlin = '
 android/build.gradle android/gradle/wrapper/gradle-wrapper.properties
 
 ![Screenshot_1642957665](https://user-images.githubusercontent.com/31604881/150689804-b96b994a-1ebb-401a-abdc-b129a02d7a9f.png)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/31604881/150689804-b96b994a-1ebb-401a-abdc-b129a02d7a9f.png" width="150" title="hover text">
+</p>
