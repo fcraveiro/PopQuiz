@@ -41,18 +41,15 @@ class _TemasState extends State<Temas> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ListTile(
-                          leading: const CircleAvatar(
+                          leading: CircleAvatar(
                             backgroundColor: Colors.white,
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.green,
-                            ),
+                            child: Text(post.temasPerguntas.toString()),
                           ),
                           title: Text(
                             post.temasNome.toString(),
                           ),
                           subtitle: Text(
-                            'Perguntas : ${post.temasPerguntas.toString()}    Respostas : ${post.temasRespostas.toString()}',
+                            'Respostas : ${post.temasRespostas.toString()}',
                           ),
                           onTap: () => responder(post.temasUuId.toString(),
                               post.temasNome.toString()),

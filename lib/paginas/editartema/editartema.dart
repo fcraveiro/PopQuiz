@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,12 +16,20 @@ class EditarTema extends StatefulWidget {
 
 List<ClassPerguntas> lista = [];
 List<ClassPerguntas> listar = [];
+
 int tipo = 0;
+int perguntasTotal = 0;
 
 class _EditarTemaState extends State<EditarTema> {
   Conecta conectar = Conecta();
   final titleController = TextEditingController();
   final formKey = GlobalKey<FormState>(); //key for form
+
+  @override
+  void initState() {
+    perguntasTotal = 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +41,7 @@ class _EditarTemaState extends State<EditarTema> {
         actions: [
           InkWell(
             onTap: () => {
-              _showAddEventDialog(1),
+              _showAddEventDialog(1, 'Perguntas'),
             },
             child: const Icon(
               FontAwesomeIcons.plus,
@@ -46,7 +53,6 @@ class _EditarTemaState extends State<EditarTema> {
           ),
           InkWell(
             onTap: () => {
-              log('clicado'),
               deletarTudo(lista),
             },
             child: const Icon(
@@ -87,7 +93,7 @@ class _EditarTemaState extends State<EditarTema> {
                 padding: const EdgeInsets.only(top: 15),
                 child: InkWell(
                   onTap: () => {
-                    _showAddEventDialog(2),
+                    _showAddEventDialog(2, 'Temas'),
                   },
                   child: const FaIcon(
                     FontAwesomeIcons.edit,
@@ -104,6 +110,7 @@ class _EditarTemaState extends State<EditarTema> {
                 if (snapshot.hasData) {
                   List<ClassPerguntas>? lista = snapshot.data;
                   listar = lista!;
+                  perguntasTotal = listar.length;
                   return Form(
                     key: formKey,
                     child: Padding(
@@ -141,8 +148,9 @@ class _EditarTemaState extends State<EditarTema> {
                                 ),
                                 InkWell(
                                   onTap: () => {
-                                    deletarPergunta(lista[index].quizUuId),
-                                    setState(() {}),
+                                    perguntasTotal--,
+                                    deletarPergunta(
+                                        lista[index].quizUuId, perguntasTotal),
                                   },
                                   child: FaIcon(
                                     FontAwesomeIcons.trash,
@@ -168,19 +176,18 @@ class _EditarTemaState extends State<EditarTema> {
     );
   }
 
-  _showAddEventDialog(tipo) async {
+  _showAddEventDialog(tipo, texto) async {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
               elevation: 12,
-              title: const Text('Perguntas'),
+              title: Text(texto),
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   buildTextField(
-                      controller: titleController,
-                      hint: 'Descrição da Pergunta'),
+                      controller: titleController, hint: 'Descrição'),
                 ],
               ),
               actions: [
@@ -212,7 +219,8 @@ class _EditarTemaState extends State<EditarTema> {
                   ),
                   onPressed: () {
                     if (tipo == 1) {
-                      recebePerguntas();
+                      perguntasTotal++;
+                      recebePerguntas(perguntasTotal);
                     }
                     if (tipo == 2) {
                       recebeTema();
@@ -246,17 +254,16 @@ class _EditarTemaState extends State<EditarTema> {
     );
   }
 
-  deletarPergunta(uuid) async {
+  deletarPergunta(uuid, total) async {
     await conectar.delPergunta(uuid);
+    await conectar.updateTotalPerguntas(
+        widget.posts.temasUuId.toString(), total);
     setState(() {});
   }
 
   deletarTudo(tema) async {
-    log('entrou');
-    log(lista.length.toString());
     for (var e in listar) {
       {
-        log(e.toString());
         tema = e.quizNome;
         await conectar.delPergunta(e.quizUuId.toString());
       }
@@ -265,7 +272,7 @@ class _EditarTemaState extends State<EditarTema> {
     Navigator.pop(context);
   }
 
-  recebePerguntas() {
+  recebePerguntas(total) {
     if (titleController.text.isEmpty) {
       mensagem(context, 'Você deve digitar a Pergunta');
       return;
@@ -277,17 +284,16 @@ class _EditarTemaState extends State<EditarTema> {
             quizNome: widget.posts.temasNome,
             quizResposta: '');
         conectar.addPerguntas(classe);
+        conectar.updateTotalPerguntas(widget.posts.temasUuId.toString(), total);
       });
       titleController.clear();
       Navigator.pop(context);
-      log(lista.toString());
     }
   }
 
   recebeTema() {
-    log('entrou em tema');
     if (titleController.text.isEmpty) {
-      mensagem(context, 'Você deve digitar a Pergunta');
+      mensagem(context, 'Você deve digitar o Tema');
       return;
     } else {
       setState(() {

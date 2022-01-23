@@ -10,10 +10,6 @@ class Menu extends StatefulWidget {
   _MenuState createState() => _MenuState();
 }
 
-//final box = GetStorage();
-
-int usuario = 1;
-
 class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
@@ -63,32 +59,6 @@ class _MenuState extends State<Menu> {
             const SizedBox(
               height: 20,
             ),
-
-            /*
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 7,
-                fixedSize: const Size(140, 40),
-                primary: const Color(0xFF006075),
-                onSurface: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AddTemas(),
-                  ),
-                );
-              },
-              child: Text(
-                'Novo Tema',
-                style: GoogleFonts.montserrat(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-*/
-
             const SizedBox(
               height: 20,
             ),
@@ -107,7 +77,7 @@ class _MenuState extends State<Menu> {
                 );
               },
               child: Text(
-                'Edita Tema',
+                'Editar Tema',
                 style: GoogleFonts.montserrat(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,

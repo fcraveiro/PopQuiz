@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:popquiz/model/model.dart';
@@ -12,9 +13,16 @@ class GravaResposta extends StatefulWidget {
   _GravaRespostaState createState() => _GravaRespostaState();
 }
 
+int contador = 0;
+
 class _GravaRespostaState extends State<GravaResposta> {
   Conecta conectar = Conecta();
-  final formKey = GlobalKey<FormState>(); //key for form
+
+  @override
+  void initState() {
+    contador = 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +31,6 @@ class _GravaRespostaState extends State<GravaResposta> {
         title: const Text('Confirme'),
         centerTitle: true,
         backgroundColor: const Color(0xFFFF9E1B),
-        actions: const [
-          /*
-          InkWell(
-              onTap: () => {if (formKey.currentState!.validate()) {}},
-              child: const Icon(FontAwesomeIcons.save)),
-          const SizedBox(
-            width: 15,
-          ),
-*/
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -82,7 +80,11 @@ class _GravaRespostaState extends State<GravaResposta> {
                     primary: const Color(0xFF006075),
                     onSurface: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () => {
+                    Navigator.pop(context),
+                    Navigator.pop(context),
+                    Navigator.pop(context),
+                  },
                   child: Text(
                     'Menu',
                     style: GoogleFonts.montserrat(
@@ -98,7 +100,10 @@ class _GravaRespostaState extends State<GravaResposta> {
                     primary: const Color(0xFF006075),
                     onSurface: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () => {
+                    FocusScope.of(context).requestFocus(FocusNode()),
+                    Navigator.pop(context),
+                  },
                   child: Text(
                     'Editar',
                     style: GoogleFonts.montserrat(
@@ -114,7 +119,9 @@ class _GravaRespostaState extends State<GravaResposta> {
                     primary: const Color(0xFF006075),
                     onSurface: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    gravaRespostas();
+                  },
                   child: Text(
                     'Gravar',
                     style: GoogleFonts.montserrat(
@@ -131,8 +138,22 @@ class _GravaRespostaState extends State<GravaResposta> {
     );
   }
 
-  gravaRespostas(uuid, tema, pergunta, resposta) {
-    conectar.quizRespostas(uuid, resposta);
+  gravaRespostas() async {
+    for (var e in widget.lista) {
+      {
+        if (e.quizResposta == null || e.quizResposta == '') {
+        } else {
+          contador++;
+          log(contador.toString());
+          await conectar.updateTotalRespostas(e.quizNome.toString(), contador);
+        }
+        await conectar.quizRespostas(
+            e.quizUuId.toString(), e.quizResposta.toString());
+      }
+    }
+    setState(() {
+      contador = 0;
+    });
   }
 
   style() {
@@ -152,8 +173,3 @@ class _GravaRespostaState extends State<GravaResposta> {
     );
   }
 }
-
-//    log('UuId ${uuid.toString()}');
-//    log('Tema ${tema.toString()}');
-//    log('Pergunta ${pergunta.toString()}');
-//    log('Resposta ${resposta.toString()}');

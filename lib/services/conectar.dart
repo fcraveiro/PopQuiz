@@ -64,6 +64,24 @@ class Conecta {
         .then((value) => log(value.error.toString()));
   }
 
+  updateTotalPerguntas(String temasUuId, int perguntas) async {
+    await client
+        .from('temas')
+        .update({'temasPerguntas': perguntas})
+        .eq('temasUuId', temasUuId)
+        .execute()
+        .then((value) => log(value.error.toString()));
+  }
+
+  updateTotalRespostas(String temasNome, int respostas) async {
+    await client
+        .from('temas')
+        .update({'temasRespostas': respostas})
+        .eq('temasNome', temasNome)
+        .execute()
+        .then((value) => log(value.error.toString()));
+  }
+
   updatePerguntas(
     String nomeAtual,
     String novoNome,
@@ -85,7 +103,7 @@ class Conecta {
         .execute()
         .then((value) => log(value.error.toString()));
   }
-/*
+
   Future addTemas(campos) async {
     ClassTemas novosTemas = campos;
     Map<String, dynamic> novosTemasJson = novosTemas.toJson();
@@ -95,13 +113,21 @@ class Conecta {
         .execute()
         .then((value) => log(value.error.toString()));
   }
-*/
 
   Future delPergunta(String uuid) async {
     await client
         .from('perguntas')
         .delete()
         .eq('quizUuId', uuid)
+        .execute()
+        .then((value) => log(value.error.toString()));
+  }
+
+  Future delPerguntas(String nome) async {
+    await client
+        .from('perguntas')
+        .delete()
+        .eq('quizNome', nome)
         .execute()
         .then((value) => log(value.error.toString()));
   }
