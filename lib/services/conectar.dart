@@ -10,7 +10,6 @@ class Conecta {
   final client = SupabaseClient(supabaseUrl, supabaseKey);
 
   Future<List<ClassTemas>> getTemas() async {
-    log('Leu Temas');
     final response = await client
         .from('temas')
         .select()
@@ -20,12 +19,10 @@ class Conecta {
       final dataList = response.data as List;
       return (dataList.map((map) => ClassTemas.fromJson(map)).toList());
     }
-    log('Error fetching notes: ${response.error!.message}');
     return [];
   }
 
   Future<List<ClassPerguntas>> getPerguntas(tema) async {
-    log('Leu Perguntas');
     final response = await client
         .from('perguntas')
         .select()
@@ -36,7 +33,6 @@ class Conecta {
       final dataList = response.data as List;
       return (dataList.map((map) => ClassPerguntas?.fromJson(map)).toList());
     }
-    log('Error fetching notes: ${response.error!.message}');
     return [];
   }
 
@@ -46,9 +42,9 @@ class Conecta {
         .update({'quizResposta': resposta})
         .eq('quizUuId', uuid)
         .execute()
-        .then((value) => log('Respostas ok'));
+        .then((value) => log(value.error.toString()));
   }
-
+/*
   temasRespostas(String temasUuId, int perguntas, int respostas) async {
     await client
         .from('temas')
@@ -56,6 +52,28 @@ class Conecta {
         .eq('temasUuId', temasUuId)
         .execute()
         .then((value) => log('Temas ok'));
+  }
+*/
+
+  updateTema(String temasUuId, String temasNome) async {
+    await client
+        .from('temas')
+        .update({'temasNome': temasNome})
+        .eq('temasUuId', temasUuId)
+        .execute()
+        .then((value) => log(value.error.toString()));
+  }
+
+  updatePerguntas(
+    String nomeAtual,
+    String novoNome,
+  ) async {
+    await client
+        .from('perguntas')
+        .update({'quizNome': novoNome})
+        .eq('quizNome', nomeAtual)
+        .execute()
+        .then((value) => log(value.error.toString()));
   }
 
   Future addPerguntas(campos) async {
@@ -67,7 +85,7 @@ class Conecta {
         .execute()
         .then((value) => log(value.error.toString()));
   }
-
+/*
   Future addTemas(campos) async {
     ClassTemas novosTemas = campos;
     Map<String, dynamic> novosTemasJson = novosTemas.toJson();
@@ -77,6 +95,7 @@ class Conecta {
         .execute()
         .then((value) => log(value.error.toString()));
   }
+*/
 
   Future delPergunta(String uuid) async {
     await client
@@ -87,8 +106,16 @@ class Conecta {
         .then((value) => log(value.error.toString()));
   }
 
-/*
+  Future delTema(String uuid) async {
+    await client
+        .from('temas')
+        .delete()
+        .eq('temasUuId', uuid)
+        .execute()
+        .then((value) => log(value.error.toString()));
+  }
 
+/*
   Future delHistorico(int idPaciente) async {
     await client
         .from('historico')

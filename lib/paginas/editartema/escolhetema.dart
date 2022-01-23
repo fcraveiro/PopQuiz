@@ -41,18 +41,23 @@ class _EscolheTemaState extends State<EscolheTema> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ListTile(
-                          leading: const CircleAvatar(
+                          leading: CircleAvatar(
                             backgroundColor: Colors.white,
+                            child: Text(post.temasPerguntas.toString()),
+
+/*                            
                             child: Icon(
                               Icons.check,
                               color: Colors.green,
                             ),
+
+*/
                           ),
                           title: Text(
                             post.temasNome.toString(),
                           ),
                           subtitle: Text(
-                            'Perguntas : ${post.temasPerguntas.toString()}    Respostas : ${post.temasRespostas.toString()}',
+                            'Respostas : ${post.temasRespostas.toString()}',
                           ),
                           onTap: () => {
                             responder(post),

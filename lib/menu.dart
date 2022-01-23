@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:popquiz/paginas/adicionartema/addtema.dart';
 import 'package:popquiz/paginas/editartema/escolhetema.dart';
 import 'package:popquiz/paginas/responder/temas.dart';
 
@@ -64,6 +63,8 @@ class _MenuState extends State<Menu> {
             const SizedBox(
               height: 20,
             ),
+
+            /*
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 7,
@@ -86,6 +87,8 @@ class _MenuState extends State<Menu> {
                 ),
               ),
             ),
+*/
+
             const SizedBox(
               height: 20,
             ),
