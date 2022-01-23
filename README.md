@@ -15,5 +15,5 @@ android/build.gradle android/gradle/wrapper/gradle-wrapper.properties
 ![Screenshot_1642957665](https://user-images.githubusercontent.com/31604881/150689804-b96b994a-1ebb-401a-abdc-b129a02d7a9f.png)
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/31604881/150689804-b96b994a-1ebb-401a-abdc-b129a02d7a9f.png" width="150" title="hover text">
+  <img src="https://user-images.githubusercontent.com/31604881/150689804-b96b994a-1ebb-401a-abdc-b129a02d7a9f.png" width="300" title="hover text">
 </p>
