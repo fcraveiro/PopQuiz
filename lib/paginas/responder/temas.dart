@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:popquiz/model/model.dart';
 import 'package:popquiz/paginas/responder/respostas.dart';
 import 'package:popquiz/services/conectar.dart';
@@ -51,6 +52,9 @@ class _TemasState extends State<Temas> {
                           subtitle: Text(
                             'Respostas : ${post.temasRespostas.toString()}',
                           ),
+                          trailing: (post.temasPerguntas == post.temasRespostas)
+                              ? const FaIcon(FontAwesomeIcons.check)
+                              : const Text(''),
                           onTap: () => responder(post.temasUuId.toString(),
                               post.temasNome.toString()),
                         ),

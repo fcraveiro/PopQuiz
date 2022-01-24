@@ -142,15 +142,13 @@ class _GravaRespostaState extends State<GravaResposta> {
 
   gravaRespostas() async {
     for (var e in widget.lista) {
-      {
-        if (e.quizResposta == null || e.quizResposta == '') {
-        } else {
-          contador++;
-          await conectar.updateTotalRespostas(e.quizNome.toString(), contador);
-        }
-        await conectar.quizRespostas(
-            e.quizUuId.toString(), e.quizResposta.toString());
+      if (e.quizResposta == null || e.quizResposta == '') {
+      } else {
+        contador++;
       }
+      await conectar.updateTotalRespostas(e.quizNome.toString(), contador);
+      await conectar.quizRespostas(
+          e.quizUuId.toString(), e.quizResposta.toString());
     }
     setState(() {
       contador = 0;
